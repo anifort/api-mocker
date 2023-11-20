@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "api-mocker"
+version = "0.1.0"
+description = "Light application that allows to mock API calls by setting expectations prior actual call"
+authors = ["Christos Aniftos <aniftos@google.com>"]
+license = "Apache License 2.0"
+readme = "README.md"
+packages = [{include = "api_mocker"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.104.1"
+uvicorn = "^0.24.0.post1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
