@@ -41,7 +41,7 @@ def get_req_payload_sha(request) -> str:
 @app.post(
     path = "/mock", 
     description="Chat endpoint that uses Enterprise Search as information retrieval source", 
-    status_code=200)
+    status_code=201)
 async def mock(request: MockRequestBuilder):
     if request.method.upper() not in ["POST","GET","PUT","DELETE","PATCH"]:
         raise Exception("Invalid Mock HTTP Method")
@@ -51,7 +51,7 @@ async def mock(request: MockRequestBuilder):
         app.memory[request.method.upper()] = {}
     if request.url not in app.memory[request.method.upper()]:
         app.memory[request.method.upper()][request.url] = {}
-        
+
     app.memory[request.method.upper()][request.url] =  {
                 payload_sha: {
                     "status_code": request.response_status_code,
