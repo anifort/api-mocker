@@ -11,7 +11,7 @@ In the payload you need to include:
 * request_payload: What request payload should be in order to return the response_payload. Applicable for POST / PUT / PATCH requests
 * response_payload: What request payload to return when a client calls the request URL. If none then add {}
 
-Mock Expectations only leave in memory so on service restart you will need to reset your expectations. therefore we recommend doing so with a script.
+Mock Expectations only leave in memory so on service restart you will need to reset your expectations. We recommend doing so with a script.
 
 <br />
 <br />
