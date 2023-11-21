@@ -92,7 +92,9 @@ curl -X 'POST' \
 }'
 ```
 
-After using the `POST /mock` url to set your expectation, you can call your mocked URL `POST /user/create` and get the response you mocked.
+After using the `POST /mock` url to set your expectation, you can call your mocked URL `POST /user/create` and get the response you mocked. 
+
+**Notice that the payload body must match exactly the `request_payload` as defined on the above requst body.** `request_payload` for POST/PUT/PATCH is used to create a unique signature of the request and it is used for retrieving the right expectaions. This allows to have multiple expectations to the same URL but with different request_body objects
 
 ```curl
 curl -X 'POST' \
