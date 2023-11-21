@@ -1,6 +1,19 @@
 # api-mocker
 api-mocker is a light application that allows you to simulate API calls and responses for testing purposes.
 
+## How to run the application
+The application is build on FastAPI and therefore can run using uvicorn
+> uvicorn main:app --host 0.0.0.0 --port 80 --reload
+
+Additionally a docker file is provited.
+
+## API Documentation
+
+FastAPI provides OpenAPI documentation. To access it run the service and visit http://0.0.0.0:80/docs
+
+The UI allows you to try out API requests.
+
+
 ## How to set an API Expectation
 Before mocking an API call you need to set up an expecation using POST /mock
 
@@ -18,7 +31,7 @@ Mock Expectations only leave in memory so on service restart you will need to re
 
 ## Example 1: GET /user/1 
 
-Here is an example on how to set a mock expectation request `GET /user/1`
+Set a mock expectation for `GET /user/1`
 ```curl
 curl -X 'POST' \
   'http://0.0.0.0/mock' \
@@ -27,8 +40,8 @@ curl -X 'POST' \
   -d '{
   "url": "/user/1",
   "method": "GET",
-  "response_status_code": 200,
   "request_payload": {},
+  "response_status_code": 200,
   "response_payload": {
     "name": "Paul",
     "lastname": "Martin"
@@ -36,7 +49,7 @@ curl -X 'POST' \
 }'
 ```
 
-After using the `POST /mock` url to set your expectation for `POST /user/create` , you can now `POST /user/create` and get the response you mocked.
+After using the `POST /mock` url to set your expectation, you can call your mocked URL `POST /user/create` and get the response you mocked. The mock remains in memory so you can call `POST /user/create` multiple times.
 
 ```curl
 curl -X 'GET' \
@@ -58,7 +71,7 @@ server response
 
 ## Example 2: POST /user/create
 
-Here is an example on how to set a mock expectation request `POST /user/create`
+Set a mock expectation for `POST /user/create`
 ```curl
 curl -X 'POST' \
   'http://0.0.0.0/mock' \
@@ -66,12 +79,12 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -d '{
   "url": "/user/create",
-  "method": "POST",,
+  "method": "POST",
   "request_payload": {
     "name": "John",
     "lastname": "Smith"
   },
-  "response_status_code": 200
+  "response_status_code": 200,
   "response_payload":  {
     "status": "created",
     "user_id": "2"
@@ -79,7 +92,7 @@ curl -X 'POST' \
 }'
 ```
 
-After using the `POST /mock` url to set your expectation for `POST /user/create` , you can now `POST /user/create` and get the response you mocked.
+After using the `POST /mock` url to set your expectation, you can call your mocked URL `POST /user/create` and get the response you mocked.
 
 ```curl
 curl -X 'POST' \
@@ -87,13 +100,12 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "name": "Paul",
-  "lastname": "Martin"
-}'
+    "name": "John",
+    "lastname": "Smith"
+  }'
 ```
 
 server response
-
 ```json
 {
   "status": "created",

@@ -34,7 +34,6 @@ def get_req_payload_sha(request) -> str:
     request_payload = request.get('request_payload', {})
     if not request_payload:
         return "none"
-
     else:
         return get_sha(request_payload)
 
@@ -59,9 +58,9 @@ async def mock(request: MockRequestBuilder):
         }
     }
 
-    return {"message": f"mock expectations for {request.method.upper()} {request.url} set successfully", "request_payload": payload_sha}
+    return {"message": f"mock expectations for {request.method.upper()} {request.url} set successfully", "request_payload_sha": payload_sha}
 
-def process_request(full_path, request: dict, method):
+def process_request(full_path: str, request: dict, method: str):
     path = f"/{full_path}"
     if path not in app.memory[method]:  
         return JSONResponse(status_code=status.HTTP_417_EXPECTATION_FAILED, content={"message": f"Expectation for {method} {path} not configured"})
@@ -77,7 +76,6 @@ async def catch_all(full_path: str, body: Annotated[dict, Body()], request: Requ
     return process_request(full_path, body, request.method)
 
 
-
 @app.get("/{full_path:path}")
 @app.delete("/{full_path:path}")
 async def catch_all(full_path: str, request: Request): 
@@ -85,9 +83,7 @@ async def catch_all(full_path: str, request: Request):
     if path not in app.memory[request.method.upper()]:  
         return JSONResponse(status_code=status.HTTP_417_EXPECTATION_FAILED, content={"message": f"Expectation for {request.method} {path} not configured"})
     
-
     payload_sha = get_req_payload_sha(request)
-
     payload = app.memory[request.method.upper()][path][payload_sha]
 
     return JSONResponse(status_code=payload.get('status_code'), content=payload.get('content'))
