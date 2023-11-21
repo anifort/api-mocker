@@ -47,16 +47,17 @@ async def mock(request: MockRequestBuilder):
         raise Exception("Invalid Mock HTTP Method")
   
     payload_sha = get_req_payload_sha(request.__dict__) 
-    app.memory = {
-        request.method.upper(): { 
-            request.url: {
+    if request.method.upper() not in app.memory:
+        app.memory[request.method.upper()] = {}
+    if request.url not in app.memory[request.method.upper()]:
+        app.memory[request.method.upper()][request.url] = {}
+        
+    app.memory[request.method.upper()][request.url] =  {
                 payload_sha: {
                     "status_code": request.response_status_code,
                     "content": request.response_payload 
                 }
             }
-        }
-    }
 
     return {"message": f"mock expectations for {request.method.upper()} {request.url} set successfully", "request_payload_sha": payload_sha}
 
